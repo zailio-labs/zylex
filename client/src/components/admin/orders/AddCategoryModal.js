@@ -35,11 +35,13 @@ const AddCategoryModal = (props) => {
     e.target.reset();
 
     if (!fData.cImage) {
-      return setFdata({ ...fData, error: "Please upload a category image" });
+      // FIXED: Moved dispatch before return
       dispatch({ type: "loading", payload: false });
+      setFdata({ ...fData, error: "Please upload a category image" });
       setTimeout(() => {
-        return setFdata({ ...fData, error: false });
+        setFdata({ ...fData, error: false });
       }, 2000);
+      return; // Added return here
     }
 
     try {
@@ -71,11 +73,12 @@ const AddCategoryModal = (props) => {
         setFdata({ ...fData, success: false, error: responseData.error });
         dispatch({ type: "loading", payload: false });
         setTimeout(() => {
-          return setFdata({ ...fData, error: false, success: false });
+          setFdata({ ...fData, error: false, success: false });
         }, 2000);
       }
     } catch (error) {
       console.log(error);
+      dispatch({ type: "loading", payload: false }); // Added error handling
     }
   };
 
