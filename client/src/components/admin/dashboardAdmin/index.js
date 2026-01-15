@@ -19,10 +19,16 @@ const DashboardComponent = () => {
 
 const DashboardAdmin = (props) => {
   const [data, dispatch] = useReducer(dashboardReducer, dashboardState);
+  
+  // Optional: Memoize context value to prevent unnecessary re-renders
+  const contextValue = React.useMemo(() => ({ data, dispatch }), [data, dispatch]);
+  
   return (
     <Fragment>
-      <DashboardContext.Provider value={{ data, dispatch }}>
-        <AdminLayout children={<DashboardComponent />} />
+      <DashboardContext.Provider value={contextValue}>
+        <AdminLayout>
+          <DashboardComponent />
+        </AdminLayout>
       </DashboardContext.Provider>
     </Fragment>
   );
