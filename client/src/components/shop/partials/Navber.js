@@ -1,5 +1,5 @@
 import React, { Fragment, useContext } from "react";
-import { useHistory, useLocation } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom"; // Changed from useHistory to useNavigate
 import "./style.css";
 
 import { logout } from "./Action";
@@ -7,7 +7,7 @@ import { LayoutContext } from "../index";
 import { isAdmin } from "../auth/fetchApi";
 
 const Navber = (props) => {
-  const history = useHistory();
+  const navigate = useNavigate(); // Changed from useHistory to useNavigate
   const location = useLocation();
 
   const { data, dispatch } = useContext(LayoutContext);
@@ -35,19 +35,19 @@ const Navber = (props) => {
           <div className="hidden lg:block col-span-1 flex text-gray-600 mt-1">
             <span
               className="hover:bg-gray-200 px-4 py-3 rounded-lg font-light tracking-widest hover:text-gray-800 cursor-pointer"
-              onClick={(e) => history.push("/")}
+              onClick={(e) => navigate("/")} // Changed from history.push to navigate
             >
               Shop
             </span>
             <span
               className="hover:bg-gray-200 px-4 py-3 rounded-lg font-light tracking-widest hover:text-gray-800 cursor-pointer"
-              onClick={(e) => history.push("/blog")}
+              onClick={(e) => navigate("/blog")} // Changed from history.push to navigate
             >
               Blog
             </span>
             <span
               className="hover:bg-gray-200 px-4 py-3 rounded-lg font-light tracking-widest hover:text-gray-800 cursor-pointer"
-              onClick={(e) => history.push("/contact-us")}
+              onClick={(e) => navigate("/contact-us")} // Changed from history.push to navigate
             >
               Contact us
             </span>
@@ -69,7 +69,7 @@ const Navber = (props) => {
               />
             </svg>
             <span
-              onClick={(e) => history.push("/")}
+              onClick={(e) => navigate("/")} // Changed from history.push to navigate
               style={{ letterSpacing: "0.10rem" }}
               className="flex items-left text-center font-bold uppercase text-gray-800 text-2xl cursor-pointer px-2 text-center"
             >
@@ -77,7 +77,7 @@ const Navber = (props) => {
             </span>
           </div>
           <div
-            onClick={(e) => history.push("/")}
+            onClick={(e) => navigate("/")} // Changed from history.push to navigate
             style={{ letterSpacing: "0.70rem" }}
             className="hidden lg:block flex items-left col-span-1 text-center text-gray-800 font-bold tracking-widest uppercase text-2xl cursor-pointer"
           >
@@ -86,7 +86,7 @@ const Navber = (props) => {
           <div className="flex items-right col-span-2 lg:col-span-1 flex justify-end">
             {/*  WishList Page Button */}
             <div
-              onClick={(e) => history.push("/wish-list")}
+              onClick={(e) => navigate("/wish-list")} // Changed from history.push to navigate
               className="hover:bg-gray-200 rounded-lg px-2 py-2 cursor-pointer"
               title="Wishlist"
             >
@@ -134,7 +134,7 @@ const Navber = (props) => {
                       <Fragment>
                         <li className="flex flex-col text-gray-700 w-48 shadow-lg">
                           <span
-                            onClick={(e) => history.push("/user/orders")}
+                            onClick={(e) => navigate("/user/orders")} // Changed from history.push to navigate
                             className="flex space-x-2 py-2 px-8 hover:bg-gray-400 cursor-pointer"
                           >
                             <span>
@@ -156,7 +156,7 @@ const Navber = (props) => {
                             <span>My Orders</span>
                           </span>
                           <span
-                            onClick={(e) => history.push("/user/profile")}
+                            onClick={(e) => navigate("/user/profile")} // Changed from history.push to navigate
                             className="flex space-x-2 py-2 px-8 hover:bg-gray-400 cursor-pointer"
                           >
                             <span>
@@ -178,7 +178,7 @@ const Navber = (props) => {
                             <span>My Account</span>
                           </span>
                           <span
-                            onClick={(e) => history.push("/wish-list")}
+                            onClick={(e) => navigate("/wish-list")} // Changed from history.push to navigate
                             className="flex space-x-2 py-2 px-8 hover:bg-gray-400 cursor-pointer"
                           >
                             <span>
@@ -200,7 +200,7 @@ const Navber = (props) => {
                             <span>My Wishlist</span>
                           </span>
                           <span
-                            onClick={(e) => history.push("/user/setting")}
+                            onClick={(e) => navigate("/user/setting")} // Changed from history.push to navigate
                             className="flex space-x-1 py-2 px-8 hover:bg-gray-400 cursor-pointer"
                           >
                             <span>
@@ -255,7 +255,7 @@ const Navber = (props) => {
                       <Fragment>
                         <li className="flex flex-col text-gray-700 w-48 shadow-lg">
                           <span
-                            onClick={(e) => history.push("/admin/dashboard")}
+                            onClick={(e) => navigate("/admin/dashboard")} // Changed from history.push to navigate
                             className="flex space-x-2 py-2 px-8 hover:bg-gray-400 cursor-pointer"
                           >
                             <span>
@@ -369,19 +369,19 @@ const Navber = (props) => {
           <div className="col-span-1 flex flex-col text-gray-600">
             <span
               className="font-medium text-lg tracking-widest hover:text-gray-800 hover:bg-gray-200 px-3 py-2 rounded-lg cursor-pointer"
-              onClick={(e) => history.push("/")}
+              onClick={(e) => navigate("/")} // Changed from history.push to navigate
             >
               Shop
             </span>
             <span
               className="font-medium text-lg tracking-widest hover:text-gray-800 hover:bg-gray-200 px-3 py-2 rounded-lg cursor-pointer"
-              onClick={(e) => history.push("/blog")}
+              onClick={(e) => navigate("/blog")} // Changed from history.push to navigate
             >
               Blog
             </span>
             <span
               className="font-medium text-lg tracking-widest hover:text-gray-800 hover:bg-gray-200 px-3 py-2 rounded-lg cursor-pointer"
-              onClick={(e) => history.push("/contact-us")}
+              onClick={(e) => navigate("/contact-us")} // Changed from history.push to navigate
             >
               Contact us
             </span>
