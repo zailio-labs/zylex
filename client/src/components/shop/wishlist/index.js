@@ -5,7 +5,9 @@ import SingleWishProduct from "./SingleWishProduct";
 const WishList = () => {
   return (
     <Fragment>
-      <Layout children={<SingleWishProduct />} />
+      <Layout>
+        <SingleWishProduct />
+      </Layout>
     </Fragment>
   );
 };
