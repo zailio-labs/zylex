@@ -72,10 +72,10 @@ const UploadImageSection = () => {
               <path
                 strokeLinecap="round"
                 strokeLinejoin="round"
-                strokeWidth={2}  {/* Correct - uses curly braces */}
+                strokeWidth={2}
                 d="M12 6v6m0 0v6m0-6h6m-6 0H6"
               />
-            </svg>{" "}
+            </svg>
             <span>Upload File</span>
           </div>
           <input
@@ -107,7 +107,7 @@ const UploadImageSection = () => {
             <path
               strokeLinecap="round"
               strokeLinejoin="round"
-              strokeWidth={2}  {/* Correct - uses curly braces */}
+              strokeWidth={2}
               d="M6 18L18 6M6 6l12 12"
             />
           </svg>
@@ -144,7 +144,7 @@ const AllImages = () => {
             <path
               strokeLinecap="round"
               strokeLinejoin="round"
-              strokeWidth={2}  {/* Fixed: changed from strokeWidth="2" to strokeWidth={2} */}
+              strokeWidth={2}
               d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
             ></path>
           </svg>
@@ -177,7 +177,7 @@ const AllImages = () => {
                     <path
                       strokeLinecap="round"
                       strokeLinejoin="round"
-                      strokeWidth={2}  {/* Correct - uses curly braces */}
+                      strokeWidth={2}
                       d="M6 18L18 6M6 6l12 12"
                     />
                   </svg>
