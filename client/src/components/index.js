@@ -1,4 +1,5 @@
 import React from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import {
   Home,
   WishList,
@@ -13,75 +14,33 @@ import {
 import { DashboardAdmin, Categories, Products, Orders } from "./admin";
 import { UserProfile, UserOrders, SettingUser } from "./shop/dashboardUser";
 
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
-
-/* Routing All page will be here */
-const Routes = (props) => {
+const AppRoutes = (props) => {
   return (
     <Router>
-      <Switch>
+      <Routes>
         {/* Shop & Public Routes */}
-        <Route exact path="/" component={Home} />
-        <Route exact path="/wish-list" component={WishList} />
-        <Route exact path="/products/:id" component={ProductDetails} />
-        <Route
-          exact
-          path="/products/category/:catId"
-          component={ProductByCategory}
-        />
-        <CartProtectedRoute
-          exact={true}
-          path="/checkout"
-          component={CheckoutPage}
-        />
-        {/* Shop & Public Routes End */}
+        <Route path="/" element={<Home />} />
+        <Route path="/wish-list" element={<WishList />} />
+        <Route path="/products/:id" element={<ProductDetails />} />
+        <Route path="/products/category/:catId" element={<ProductByCategory />} />
+        <Route path="/checkout" element={<CartProtectedRoute><CheckoutPage /></CartProtectedRoute>} />
 
         {/* Admin Routes */}
-        <AdminProtectedRoute
-          exact={true}
-          path="/admin/dashboard"
-          component={DashboardAdmin}
-        />
-        <AdminProtectedRoute
-          exact={true}
-          path="/admin/dashboard/categories"
-          component={Categories}
-        />
-        <AdminProtectedRoute
-          exact={true}
-          path="/admin/dashboard/products"
-          component={Products}
-        />
-        <AdminProtectedRoute
-          exact={true}
-          path="/admin/dashboard/orders"
-          component={Orders}
-        />
-        {/* Admin Routes End */}
+        <Route path="/admin/dashboard" element={<AdminProtectedRoute><DashboardAdmin /></AdminProtectedRoute>} />
+        <Route path="/admin/dashboard/categories" element={<AdminProtectedRoute><Categories /></AdminProtectedRoute>} />
+        <Route path="/admin/dashboard/products" element={<AdminProtectedRoute><Products /></AdminProtectedRoute>} />
+        <Route path="/admin/dashboard/orders" element={<AdminProtectedRoute><Orders /></AdminProtectedRoute>} />
 
         {/* User Dashboard */}
-        <ProtectedRoute
-          exact={true}
-          path="/user/profile"
-          component={UserProfile}
-        />
-        <ProtectedRoute
-          exact={true}
-          path="/user/orders"
-          component={UserOrders}
-        />
-        <ProtectedRoute
-          exact={true}
-          path="/user/setting"
-          component={SettingUser}
-        />
-        {/* User Dashboard End */}
+        <Route path="/user/profile" element={<ProtectedRoute><UserProfile /></ProtectedRoute>} />
+        <Route path="/user/orders" element={<ProtectedRoute><UserOrders /></ProtectedRoute>} />
+        <Route path="/user/setting" element={<ProtectedRoute><SettingUser /></ProtectedRoute>} />
 
         {/* 404 Page */}
-        <Route component={PageNotFound} />
-      </Switch>
+        <Route path="*" element={<PageNotFound />} />
+      </Routes>
     </Router>
   );
 };
 
-export default Routes;
+export default AppRoutes;
