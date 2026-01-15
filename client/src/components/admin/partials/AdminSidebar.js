@@ -1,9 +1,9 @@
 import React, { Fragment } from "react";
-import { useLocation, useHistory } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom"; // Changed from useHistory to useNavigate
 
 const AdminSidebar = (props) => {
   const location = useLocation();
-  const history = useHistory();
+  const navigate = useNavigate(); // Changed from useHistory to useNavigate
 
   return (
     <Fragment>
@@ -13,7 +13,7 @@ const AdminSidebar = (props) => {
         className="hidden md:block sticky top-0 left-0 h-screen md:w-3/12 lg:w-2/12 sidebarShadow bg-white text-gray-600"
       >
         <div
-          onClick={(e) => history.push("/admin/dashboard")}
+          onClick={(e) => navigate("/admin/dashboard")} // Changed from history.push to navigate
           className={`${
             location.pathname === "/admin/dashboard"
               ? "border-r-4 border-gray-800 bg-gray-100"
@@ -40,7 +40,7 @@ const AdminSidebar = (props) => {
         </div>
         <hr className="border-b border-gray-200" />
         <div
-          onClick={(e) => history.push("/admin/dashboard/categories")}
+          onClick={(e) => navigate("/admin/dashboard/categories")} // Changed from history.push to navigate
           className={`${
             location.pathname === "/admin/dashboard/categories"
               ? "border-r-4 border-gray-800 bg-gray-100"
@@ -67,7 +67,7 @@ const AdminSidebar = (props) => {
         </div>
         <hr className="border-b border-gray-200" />
         <div
-          onClick={(e) => history.push("/admin/dashboard/products")}
+          onClick={(e) => navigate("/admin/dashboard/products")} // Changed from history.push to navigate
           className={`${
             location.pathname === "/admin/dashboard/products"
               ? "border-r-4 border-gray-800 bg-gray-100"
@@ -94,7 +94,7 @@ const AdminSidebar = (props) => {
         </div>
         <hr className="border-b border-gray-200" />
         <div
-          onClick={(e) => history.push("/admin/dashboard/orders")}
+          onClick={(e) => navigate("/admin/dashboard/orders")} // Changed from history.push to navigate
           className={`${
             location.pathname === "/admin/dashboard/orders"
               ? "border-r-4 border-gray-800 bg-gray-100"
