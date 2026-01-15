@@ -1,9 +1,9 @@
 import React, { Fragment } from "react";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom"; // Changed from useHistory to useNavigate
 
 const Submenu = (props) => {
   const { categoryId, category, product } = props.value;
-  const history = useHistory();
+  const navigate = useNavigate(); // Changed from useHistory to useNavigate
   return (
     <Fragment>
       {/* Submenu Section */}
@@ -12,13 +12,13 @@ const Submenu = (props) => {
           <div className="text-sm flex space-x-2">
             <span
               className="hover:text-yellow-700 cursor-pointer"
-              onClick={(e) => history.push("/")}
+              onClick={(e) => navigate("/")} // Changed from history.push to navigate
             >
               Shop
             </span>
             <span
               className="hover:text-yellow-700 cursor-pointer"
-              onClick={(e) => history.push(`/products/category/${categoryId}`)}
+              onClick={(e) => navigate(`/products/category/${categoryId}`)} // Changed from history.push to navigate
             >
               {category}
             </span>
