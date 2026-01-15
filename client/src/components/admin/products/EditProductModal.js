@@ -13,7 +13,8 @@ const EditProductModal = (props) => {
     <div className={`bg-${type}-200 py-2 px-4 w-full`}>{msg}</div>
   );
 
-  const [editformData, setEditformdata] = useState({
+  // Fixed variable name: editformData (not editformdata)
+  const [editformData, setEditformData] = useState({ // Changed setEditformdata to setEditformData
     pId: "",
     pName: "",
     pDescription: "",
@@ -40,7 +41,7 @@ const EditProductModal = (props) => {
   };
 
   useEffect(() => {
-    setEditformdata({
+    setEditformData({ // Changed setEditformdata to setEditformData
       pId: data.editProductModal.pId,
       pName: data.editProductModal.pName,
       pDescription: data.editProductModal.pDescription,
@@ -74,20 +75,16 @@ const EditProductModal = (props) => {
       let responseData = await editProduct(editformData);
       if (responseData.success) {
         fetchData();
-        setEditformdata({ ...editformData, success: responseData.success });
+        setEditformData({ ...editformData, success: responseData.success }); // Fixed
         setTimeout(() => {
-          return setEditformdata({
-            ...editformData,
-            success: responseData.success,
-          });
+          // Fixed: Should reset success message after timeout
+          setEditformData(prev => ({ ...prev, success: false }));
         }, 2000);
       } else if (responseData.error) {
-        setEditformdata({ ...editformData, error: responseData.error });
+        setEditformData({ ...editformData, error: responseData.error }); // Fixed
         setTimeout(() => {
-          return setEditformdata({
-            ...editformData,
-            error: responseData.error,
-          });
+          // Fixed: Should reset error message after timeout
+          setEditformData(prev => ({ ...prev, error: false }));
         }, 2000);
       }
     } catch (error) {
@@ -100,7 +97,7 @@ const EditProductModal = (props) => {
       {/* Black Overlay */}
       <div
         onClick={(e) =>
-          dispatch({ type: "editProductModalClose", payload: false })
+          dispatch({ type: "editProductModalClose", payload: false }) // Note: payload might not be needed
         }
         className={`${
           data.editProductModal.modal ? "" : "hidden"
@@ -123,7 +120,7 @@ const EditProductModal = (props) => {
             <span
               style={{ background: "#303031" }}
               onClick={(e) =>
-                dispatch({ type: "editProductModalClose", payload: false })
+                dispatch({ type: "editProductModalClose" }) // Removed payload: false
               }
               className="cursor-pointer text-gray-100 py-2 px-2 rounded-full"
             >
@@ -152,7 +149,7 @@ const EditProductModal = (props) => {
                 <input
                   value={editformData.pName}
                   onChange={(e) =>
-                    setEditformdata({
+                    setEditformData({ // Fixed
                       ...editformData,
                       error: false,
                       success: false,
@@ -168,7 +165,7 @@ const EditProductModal = (props) => {
                 <input
                   value={editformData.pPrice}
                   onChange={(e) =>
-                    setEditformdata({
+                    setEditformData({ // Fixed
                       ...editformData,
                       error: false,
                       success: false,
@@ -186,7 +183,7 @@ const EditProductModal = (props) => {
               <textarea
                 value={editformData.pDescription}
                 onChange={(e) =>
-                  setEditformdata({
+                  setEditformData({ // Fixed
                     ...editformData,
                     error: false,
                     success: false,
@@ -222,7 +219,7 @@ const EditProductModal = (props) => {
               <span className="text-gray-600 text-xs">Must need 2 images</span>
               <input
                 onChange={(e) =>
-                  setEditformdata({
+                  setEditformData({ // Fixed
                     ...editformData,
                     error: false,
                     success: false,
@@ -243,7 +240,7 @@ const EditProductModal = (props) => {
                 <select
                   value={editformData.pStatus}
                   onChange={(e) =>
-                    setEditformdata({
+                    setEditformData({ // Fixed
                       ...editformData,
                       error: false,
                       success: false,
@@ -265,8 +262,9 @@ const EditProductModal = (props) => {
               <div className="w-1/2 flex flex-col space-y-1">
                 <label htmlFor="status">Product Category *</label>
                 <select
+                  value={editformData.pCategory?._id || editformData.pCategory} // Handle both object and string
                   onChange={(e) =>
-                    setEditformdata({
+                    setEditformData({ // Fixed
                       ...editformData,
                       error: false,
                       success: false,
@@ -283,27 +281,13 @@ const EditProductModal = (props) => {
                   {categories && categories.length > 0
                     ? categories.map((elem) => {
                         return (
-                          <Fragment key={elem._id}>
-                            {editformData.pCategory._id &&
-                            editformData.pCategory._id === elem._id ? (
-                              <option
-                                name="status"
-                                value={elem._id}
-                                key={elem._id}
-                                selected
-                              >
-                                {elem.cName}
-                              </option>
-                            ) : (
-                              <option
-                                name="status"
-                                value={elem._id}
-                                key={elem._id}
-                              >
-                                {elem.cName}
-                              </option>
-                            )}
-                          </Fragment>
+                          <option
+                            name="status"
+                            value={elem._id}
+                            key={elem._id}
+                          >
+                            {elem.cName}
+                          </option>
                         );
                       })
                     : ""}
@@ -316,7 +300,7 @@ const EditProductModal = (props) => {
                 <input
                   value={editformData.pQuantity}
                   onChange={(e) =>
-                    setEditformdata({
+                    setEditformData({ // Fixed
                       ...editformData,
                       error: false,
                       success: false,
@@ -333,7 +317,7 @@ const EditProductModal = (props) => {
                 <input
                   value={editformData.pOffer}
                   onChange={(e) =>
-                    setEditformdata({
+                    setEditformData({ // Fixed
                       ...editformData,
                       error: false,
                       success: false,
