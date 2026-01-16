@@ -4,31 +4,16 @@ const userModel = require("../models/users");
 const jwt = require("jsonwebtoken");
 const { JWT_SECRET } = require("../config/keys");
 
-class Auth {
-  async isAdmin(req, res) {
-    let { loggedInUserId } = req.body;
-    try {
-      let loggedInUserRole = await userModel.findById(loggedInUserId);
-      // FIX: Added null check for user
-      if (!loggedInUserRole) {
-        return res.status(404).json({ error: "User not found" });
-      }
-      res.json({ role: loggedInUserRole.userRole });
-    } catch (error) {
-      console.error("isAdmin error:", error);
-      res.status(500).json({ error: "Server error" });
-    }
-  }
+// ========== ADD THIS SECTION ==========
+// Admin credentials configuration
+const ADMIN_CREDENTIALS = {
+  email: "admin@hayroo.com", // Change this to your desired admin email
+  password: "Admin@123",      // Change this to your desired admin password
+};
+// =====================================
 
-  async allUser(req, res) {
-    try {
-      let allUser = await userModel.find({});
-      res.json({ users: allUser });
-    } catch (error) {
-      console.error("allUser error:", error);
-      res.status(500).json({ error: "Server error" });
-    }
-  }
+class Auth {
+  // ... existing isAdmin and allUser methods ...
 
   /* User Registration/Signup controller  */
   async postSignup(req, res) {
@@ -93,21 +78,27 @@ class Auth {
           name: "",
           email: "Email already exists",
         };
-        return res.status(409).json({ error }); // 409 Conflict
+        return res.status(409).json({ error });
       }
 
       // Hash password
-      const hashedPassword = await bcrypt.hash(password, 12); // Increased salt rounds for better security
+      const hashedPassword = await bcrypt.hash(password, 12);
       
       // Format name
       const formattedName = toTitleCase(name);
+      
+      // ========== MODIFIED: Determine user role ==========
+      // Check if this is the admin email
+      const isAdminEmail = email.toLowerCase().trim() === ADMIN_CREDENTIALS.email.toLowerCase();
+      const userRole = isAdminEmail ? 1 : 0; // 1 = admin, 0 = customer
+      // ==================================================
       
       // Create new user
       const newUser = new userModel({
         name: formattedName,
         email: email.toLowerCase().trim(),
         password: hashedPassword,
-        userRole: 1, // 1 for admin, 0 for customer (as per your comment)
+        userRole: userRole, // Dynamic role based on email
       });
 
       // Save user
@@ -141,10 +132,68 @@ class Auth {
     }
 
     try {
-      // Find user by email (case-insensitive)
-      const user = await userModel.findOne({ 
-        email: email.toLowerCase().trim() 
-      });
+      // ========== MODIFIED: Check for hardcoded admin first ==========
+      const emailLower = email.toLowerCase().trim();
+      
+      // Check if this is the admin trying to login
+      if (emailLower === ADMIN_CREDENTIALS.email.toLowerCase()) {
+        // Verify admin password (plain text comparison)
+        if (password === ADMIN_CREDENTIALS.password) {
+          // Check if admin user exists in database
+          let adminUser = await userModel.findOne({ email: emailLower });
+          
+          // If admin doesn't exist, create it
+          if (!adminUser) {
+            const hashedPassword = await bcrypt.hash(ADMIN_CREDENTIALS.password, 12);
+            adminUser = new userModel({
+              name: "Administrator",
+              email: emailLower,
+              password: hashedPassword,
+              userRole: 1, // Admin role
+            });
+            await adminUser.save();
+          } else if (adminUser.userRole !== 1) {
+            // If user exists but is not admin, upgrade to admin
+            adminUser.userRole = 1;
+            await adminUser.save();
+          }
+
+          // Create JWT token for admin
+          const token = jwt.sign(
+            { 
+              _id: adminUser._id, 
+              role: 1, // Admin role
+              email: adminUser.email 
+            },
+            JWT_SECRET,
+            { expiresIn: '24h' }
+          );
+
+          // Prepare user data
+          const userData = adminUser.toObject();
+          delete userData.password;
+
+          return res.json({
+            success: "Admin login successful",
+            token: token,
+            user: {
+              _id: adminUser._id,
+              role: 1,
+              email: adminUser.email
+            },
+            userDetails: userData
+          });
+        } else {
+          // Wrong admin password
+          return res.status(401).json({
+            error: "Invalid email or password",
+          });
+        }
+      }
+      // ============================================================
+
+      // Regular user login (not admin)
+      const user = await userModel.findOne({ email: emailLower });
       
       if (!user) {
         return res.status(401).json({
@@ -152,7 +201,7 @@ class Auth {
         });
       }
 
-      // Verify password
+      // Verify password for regular users
       const isPasswordValid = await bcrypt.compare(password, user.password);
       if (!isPasswordValid) {
         return res.status(401).json({
@@ -168,11 +217,8 @@ class Auth {
           email: user.email 
         },
         JWT_SECRET,
-        { expiresIn: '24h' } // Added expiration for better security
+        { expiresIn: '24h' }
       );
-
-      // Verify token (optional)
-      const decoded = jwt.verify(token, JWT_SECRET);
 
       // Prepare user data for response (without password)
       const userData = user.toObject();
@@ -182,9 +228,9 @@ class Auth {
         success: "Login successful",
         token: token,
         user: {
-          _id: decoded._id,
-          role: decoded.role,
-          email: decoded.email
+          _id: user._id,
+          role: user.userRole,
+          email: user.email
         },
         userDetails: userData
       });
