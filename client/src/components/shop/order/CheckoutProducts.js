@@ -1,5 +1,5 @@
 import React, { Fragment, useEffect, useContext, useState } from "react";
-import { useNavigate } from "react-router-dom"; // Changed from useHistory to useNavigate
+import { useNavigate } from "react-router-dom";
 import { LayoutContext } from "../layout";
 import { subTotal, quantity, totalCost } from "../partials/Mixins";
 
@@ -12,7 +12,7 @@ import DropIn from "braintree-web-drop-in-react";
 const apiURL = process.env.REACT_APP_API_URL;
 
 export const CheckoutComponent = (props) => {
-  const navigate = useNavigate(); // Changed from useHistory to useNavigate
+  const navigate = useNavigate();
   const { data, dispatch } = useContext(LayoutContext);
 
   const [state, setState] = useState({
@@ -44,9 +44,9 @@ export const CheckoutComponent = (props) => {
           <path
             strokeLinecap="round"
             strokeLinejoin="round"
-            strokeWidth={2}  {/* Fixed: changed from strokeWidth="2" to strokeWidth={2} */}
+            strokeWidth={2}
             d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
-          ></path>
+          />
         </svg>
         Please wait untill finish
       </div>
@@ -131,7 +131,7 @@ export const CheckoutComponent = (props) => {
                         setState,
                         getPaymentProcess,
                         totalCost,
-                        navigate // Changed from history to navigate
+                        navigate
                       )
                     }
                     className="w-full px-4 py-2 text-center text-white font-semibold cursor-pointer"
@@ -153,9 +153,9 @@ export const CheckoutComponent = (props) => {
                   <path
                     strokeLinecap="round"
                     strokeLinejoin="round"
-                    strokeWidth={2}  {/* Fixed: changed from strokeWidth="2" to strokeWidth={2} */}
+                    strokeWidth={2}
                     d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
-                  ></path>
+                  />
                 </svg>
               </div>
             )}
@@ -167,7 +167,7 @@ export const CheckoutComponent = (props) => {
 };
 
 const CheckoutProducts = ({ products }) => {
-  const navigate = useNavigate(); // Changed from useHistory to useNavigate
+  const navigate = useNavigate();
 
   return (
     <Fragment>
@@ -181,7 +181,7 @@ const CheckoutProducts = ({ products }) => {
               >
                 <div className="md:flex md:items-center md:space-x-4">
                   <img
-                    onClick={(e) => navigate(`/products/${product._id}`)} // Changed from history.push to navigate
+                    onClick={(e) => navigate(`/products/${product._id}`)}
                     className="cursor-pointer md:h-20 md:w-20 object-cover object-center"
                     src={`${apiURL}/uploads/products/${product.pImages[0]}`}
                     alt="wishListproduct"
