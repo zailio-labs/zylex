@@ -61,7 +61,7 @@ class User {
           return res.json({ success: "User created successfully" });
         }
       } catch (err) {
-        return res.json({ error: error });
+        return res.json({ error: err.message || "Error creating user" });
       }
     }
   }
@@ -71,15 +71,18 @@ class User {
     if (!uId || !name || !phoneNumber) {
       return res.json({ message: "All filled must be required" });
     } else {
-      let currentUser = userModel.findByIdAndUpdate(uId, {
-        name: name,
-        phoneNumber: phoneNumber,
-        updatedAt: Date.now(),
-      });
-      currentUser.exec((err, result) => {
-        if (err) console.log(err);
+      try {
+        // FIX: Use async/await instead of exec() callback
+        await userModel.findByIdAndUpdate(uId, {
+          name: name,
+          phoneNumber: phoneNumber,
+          updatedAt: Date.now(),
+        });
         return res.json({ success: "User updated successfully" });
-      });
+      } catch (err) {
+        console.log(err);
+        return res.json({ error: "Failed to update user" });
+      }
     }
   }
 
@@ -88,14 +91,17 @@ class User {
     if (!oId || !status) {
       return res.json({ message: "All filled must be required" });
     } else {
-      let currentUser = userModel.findByIdAndUpdate(oId, {
-        status: status,
-        updatedAt: Date.now(),
-      });
-      currentUser.exec((err, result) => {
-        if (err) console.log(err);
+      try {
+        // FIX: Use async/await instead of exec() callback
+        await userModel.findByIdAndUpdate(oId, {
+          status: status,
+          updatedAt: Date.now(),
+        });
         return res.json({ success: "User updated successfully" });
-      });
+      } catch (err) {
+        console.log(err);
+        return res.json({ error: "Failed to update user" });
+      }
     }
   }
 
@@ -112,14 +118,17 @@ class User {
       } else {
         const oldPassCheck = await bcrypt.compare(oldPassword, data.password);
         if (oldPassCheck) {
-          newPassword = bcrypt.hashSync(newPassword, 10);
-          let passChange = userModel.findByIdAndUpdate(uId, {
-            password: newPassword,
-          });
-          passChange.exec((err, result) => {
-            if (err) console.log(err);
+          newPassword = await bcrypt.hash(newPassword, 10);
+          try {
+            // FIX: Use async/await instead of exec() callback
+            await userModel.findByIdAndUpdate(uId, {
+              password: newPassword,
+            });
             return res.json({ success: "Password updated successfully" });
-          });
+          } catch (err) {
+            console.log(err);
+            return res.json({ error: "Failed to update password" });
+          }
         } else {
           return res.json({
             error: "Your old password is wrong!!",
