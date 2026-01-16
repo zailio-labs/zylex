@@ -6,13 +6,20 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: true,
       maxlength: 32,
+      trim: true,
     },
     email: {
       type: String,
       required: true,
       trim: true,
-      index: { unique: true },
-      match: /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/,
+      lowercase: true,
+      unique: true,
+      validate: {
+        validator: function(v) {
+          return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
+        },
+        message: "Please enter a valid email address"
+      }
     },
     password: {
       type: String,
@@ -21,16 +28,17 @@ const userSchema = new mongoose.Schema(
     userRole: {
       type: Number,
       required: true,
+      default: 0,
     },
     phoneNumber: {
-      type: Number,
+      type: String, // Changed to String
     },
     userImage: {
       type: String,
       default: "user.png",
     },
     verified: {
-      type: String,
+      type: Boolean, // Changed to Boolean
       default: false,
     },
     secretKey: {
@@ -45,5 +53,8 @@ const userSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-const userModel = mongoose.model("users", userSchema);
-module.exports = userModel;
+// Create indexes
+userSchema.index({ email: 1 }, { unique: true });
+
+const User = mongoose.model("User", userSchema);
+module.exports = User;
