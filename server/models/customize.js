@@ -4,6 +4,7 @@ const customizeSchema = new mongoose.Schema(
   {
     slideImage: {
       type: String,
+      required: [true, "Slide image is required"],
     },
     firstShow: {
       type: Number,
@@ -12,6 +13,9 @@ const customizeSchema = new mongoose.Schema(
   },
   { timestamps: true }
 );
+
+// Create index for firstShow
+customizeSchema.index({ firstShow: 1 });
 
 const customizeModel = mongoose.model("customizes", customizeSchema);
 module.exports = customizeModel;
