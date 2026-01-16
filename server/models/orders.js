@@ -6,7 +6,10 @@ const orderSchema = new mongoose.Schema(
     allProduct: [
       {
         id: { type: ObjectId, ref: "products" },
-        quantitiy: Number,
+        quantity: { // Fixed typo: quantitiy → quantity
+          type: Number,
+          required: true,
+        },
       },
     ],
     user: {
@@ -27,7 +30,7 @@ const orderSchema = new mongoose.Schema(
       required: true,
     },
     phone: {
-      type: Number,
+      type: String, // Changed from Number to String
       required: true,
     },
     status: {
@@ -44,6 +47,11 @@ const orderSchema = new mongoose.Schema(
   },
   { timestamps: true }
 );
+
+// Create indexes
+orderSchema.index({ user: 1 });
+orderSchema.index({ transactionId: 1 });
+orderSchema.index({ status: 1 });
 
 const orderModel = mongoose.model("orders", orderSchema);
 module.exports = orderModel;
